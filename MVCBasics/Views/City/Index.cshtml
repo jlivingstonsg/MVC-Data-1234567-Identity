@@ -1,0 +1,76 @@
+﻿@model MVCBasics.Models.CityViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<div>
+    <input type="text" id="DetailsID" />
+    <label>Enter A City's ID' To View Its Details Or Delete It</label>
+</div>
+<input type="button" value="Cities" id="LoadCities" />
+<input type="button" value="Details" id="CityDetails" />
+<input type="button" value="Delete" id="CityDelete" />
+
+<input id="SearchBt" type="button" value="Search" class="btn btn-primary" style="float: right" />
+<input id="search" class="form-control" style="float: right; width: 20%" />
+<label class="control-label" style="float:right;">Search By Anything</label>
+
+<form asp-action="Create">
+    <label class="control-label">Add New City</label>
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="CreateCity.Name" class="control-label"></label>
+                <input asp-for="CreateCity.Name" class="form-control" />
+                <span asp-validation-for="CreateCity.Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="CreateCity.Country" class="control-label"></label>
+                <select asp-items="@(new SelectList(Model.Countries))" asp-for="@Model.CreateCity.Country.Name" class="form-control"><option>Select</option></select>
+                <span asp-validation-for="CreateCity.Country.Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" style="margin-top:30px" />
+            </div>
+        </div>
+
+    </div>
+</form>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<div id="CityTable">
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#LoadCities").click(function () {
+            $('#CityTable').load("/City/CityIndex");
+        });
+
+        $("#SearchBt").click(function () {
+            var sc = $("#search").val();
+            $('#CityTable').load("/City/CityIndex", {search: sc});
+        });
+
+        $("#CityDetails").click(function () {
+            var id = $("#DetailsID").val();
+            $('#CityTable').load("/City/CityDetails", {ID:id});
+        });
+
+        $("#CityDelete").click(function () {
+            var id = $("#DetailsID").val();
+            $('#CityTable').load("/City/Delete", { ID: id });
+            alert("@ViewBag.Message")
+        });
+    });
+</script>

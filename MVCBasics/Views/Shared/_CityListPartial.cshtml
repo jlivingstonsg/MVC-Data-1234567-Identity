@@ -1,0 +1,24 @@
+﻿@model MVCBasics.Models.CityViewModel
+<div id="CityTable" class="table" style="background: skyblue; float: right; clear: both;">
+    <div>
+        <hr />
+        <div class="row">
+            <div class="col-sm-2">
+                ID
+            </div>
+            <div class="col-sm-2">
+                Name
+            </div>
+            <div class="col-sm-2">
+                Country
+            </div>
+        </div>
+    </div>
+    @*Showing Table Data with Partial View Using Razor*@
+    @{
+        @foreach (var item in Model.Cities)
+        {
+            <partial name="_CityPartial" model="item" />
+        }
+    }
+</div>

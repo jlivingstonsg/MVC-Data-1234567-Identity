@@ -1,0 +1,15 @@
+﻿@model MVCBasics.Models.CreateRoleViewModel
+@{
+    ViewData["Title"] = "Roles";
+}
+<div class="row">
+    <div class="col-md-4">
+        <h3>Role Details</h3>
+        @Html.DisplayFor(model => model.Name)
+        <h3>Users In This Role</h3>
+        @foreach (var User in Model.RoleUsers)
+        {
+            <div class="col-sm-2">@User.UserName</div>
+        }
+    </div>
+</div>

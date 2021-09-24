@@ -1,0 +1,67 @@
+﻿@model MVCBasics.Models.RoleViewModel
+@{
+    ViewData["Title"] = "Roles";
+}
+<div>
+    <input type="text" id="DetailsID" />
+    <label>Enter A Role's Name To View Its Details Or Delete It</label>
+</div>
+<input type="button" value="Roles" id="LoadRoles" />
+<input type="button" value="Details" id="RoleDetails" />
+<input type="button" value="Delete" id="RoleDelete" />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CreateRoleViewModel.Name" class="control-label"></label>
+                <input asp-for="CreateRoleViewModel.Name" class="form-control" />
+                <span asp-validation-for="CreateRoleViewModel.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<h1>All Roles</h1>
+<div id="RoleTable">
+    
+</div>
+
+<label>Select A User And Add It To A Role</label>
+<input id='AddUserBT' type='button' value='Add' class="btn btn-primary" style='float: left; clear: both;' />
+<select id='UserID' style='float: left; width: 20%;' asp-items="@(new SelectList(Model.AllUsers))" class="form-control"><option>Select</option></select>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#LoadRoles").click(function () {
+            $('#RoleTable').load("/Role/RoleIndex");
+        });
+
+        $("#SearchBt").click(function () {
+            var sc = $("#search").val();
+            $('#PersonTable').load("/Person/PeopleIndex", { search: sc });
+        });
+
+        $("#RoleDetails").click(function () {
+            var id = $("#DetailsID").val();
+            $('#RoleTable').load("/Role/RoleDetails", { RoleName: id });
+        });
+
+        $("#AddUserBT").click(function () {
+            var RoleName = $("#DetailsID").val();
+            var UserName = $("#UserID").val();
+            $.get("/Role/AddUserToRole", { RoleName: RoleName, UserName: UserName });
+        });
+
+        $("#RoleDelete").click(function () {
+            var id = $("#DetailsID").val();
+            $.get("/Role/Delete", { RoleName: id });
+            alert("@ViewBag.Message")
+        });
+    });
+</script>

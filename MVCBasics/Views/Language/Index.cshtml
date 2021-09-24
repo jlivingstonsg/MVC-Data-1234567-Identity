@@ -1,0 +1,83 @@
+﻿@model MVCBasics.Models.LanguageViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<div>
+    <input type="text" id="DetailsID" />
+    <label>Enter A Language's ID' To View Its Details Or Delete It</label>
+</div>
+
+<input type="button" value="Languages" id="LoadLanguages" />
+<input type="button" value="Details" id="LanguageDetails" />
+<input type="button" value="Delete" id="LanguageDelete" />
+
+<input id="SearchBt" type="button" value="Search" class="btn btn-primary" style="float: right" />
+<input id="search" class="form-control" style="float: right; width: 20%" />
+<label class="control-label" style="float:right;">Search By Anything</label>
+
+
+
+<form asp-action="Create">
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="CreateLanguage.Name" class="control-label"></label>
+                <input asp-for="CreateLanguage.Name" class="form-control" />
+                <span asp-validation-for="CreateLanguage.Name" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" style="margin-top:30px" />
+            </div>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<div id="LanguageTable">
+
+</div>
+<input id="AddPersonBT" type="button" value="Add" class="btn btn-primary" style="float: left; clear: both" />
+<select id='PersonID' style='float: left; width: 20%;' asp-items="@(new SelectList(Model.AllPeople))" class="form-control"><option>Select</option></select>
+@*<input id="PersonID" class="form-control" style="float: left; width: 20%;" />*@
+<p style="float: left; ">Add A Person To A Language</p>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#LoadLanguages").click(function () {
+            $('#LanguageTable').load("/Language/LanguageIndex");
+        });
+
+        $("#SearchBt").click(function () {
+            var sc = $("#search").val();
+            $('#PersonTable').load("/Person/PeopleIndex", {search: sc});
+        });
+
+        $("#LanguageDetails").click(function () {
+            var id = $("#DetailsID").val();
+            $('#LanguageTable').load("/Language/LanguageDetails", { ID: id });
+        });
+
+        $("#LanguageDelete").click(function () {
+            var id = $("#DetailsID").val();
+            $('#LanguageTable').load("/Language/Delete", { ID: id });
+            alert("@ViewBag.Message")
+        });
+
+        $("#AddPersonBT").click(function () {
+            var lid = $("#DetailsID").val();
+            var pid = $("#PersonID").val();
+            $.get("/Language/AddToPerson", { LID: lid, PID: pid });
+        });
+    });
+</script>

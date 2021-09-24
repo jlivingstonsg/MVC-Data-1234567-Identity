@@ -1,0 +1,69 @@
+﻿@model MVCBasics.Models.CountryViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<div>
+    <input type="text" id="DetailsID" />
+    <label>Enter A Country's ID' To View Its Details Or Delete It</label>
+</div>
+<input type="button" value="Countries" id="LoadCountries" />
+<input type="button" value="Details" id="CountryDetails" />
+<input type="button" value="Delete" id="CountryDelete" />
+
+<input id="SearchBt" type="button" value="Search" class="btn btn-primary" style="float: right" />
+<input id="search" class="form-control" style="float: right; width: 20%" />
+<label class="control-label" style="float:right;">Search By Anything</label>
+
+<form asp-action="Create">
+    <label class="control-label">Add New Country</label>
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="CreateCountry.Name" class="control-label"></label>
+                <input asp-for="CreateCountry.Name" class="form-control" />
+                <span asp-validation-for="CreateCountry.Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" style="margin-top:30px" />
+            </div>
+        </div>
+
+    </div>
+</form>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<div id="CountryTable">
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#LoadCountries").click(function () {
+            $('#CountryTable').load("/Country/CountryIndex");
+        });
+
+        $("#SearchBt").click(function () {
+            var sc = $("#search").val();
+            $('#CountryTable').load("/Country/CountryIndex", {search: sc});
+        });
+
+        $("#CountryDetails").click(function () {
+            var id = $("#DetailsID").val();
+            $('#CountryTable').load("/Country/CountryDetails", {ID:id});
+        });
+
+        $("#CountryDelete").click(function () {
+            var id = $("#DetailsID").val();
+            $('#CountryTable').load("/Country/Delete", { ID: id });
+            alert("@ViewBag.Message")
+        });
+    });
+</script>

@@ -1,0 +1,68 @@
+﻿@model MVCBasics.Models.PeopleViewModel
+
+<div>
+    <h4>Person Details</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatePerson.ID)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CreatePerson.ID)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatePerson.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CreatePerson.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatePerson.PhoneNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CreatePerson.PhoneNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatePerson.City.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CreatePerson.City.Name)
+        </dd>
+    </dl>
+    <h4>Person's Languages</h4>
+    <div>
+        <hr />
+        <div class="row">
+            <div class="col-sm-2">
+                ID
+            </div>
+            <div class="col-sm-2">
+                Name
+            </div>
+        </div>
+    </div>
+    @*Showing Table Data with Partial View Using Razor*@
+    @{
+        @foreach (var item in Model.CreatePerson.Languages)
+        {
+            <partial name="_LanguagePartial" model="item.Language" />
+        }
+    }
+</div>
+<div>
+    <input id='AddLanguageBT' type='button' value='Add' class="btn btn-primary" style='float: left; clear: both;' />
+    <select id='LanguageID' style='float: left; width: 20%;' asp-items="@(new SelectList(Model.AllLanguages))" class="form-control"><option>Select</option></select>
+    <p style="float: left; ">Add A Language To @Model.CreatePerson.Name</p>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#AddLanguageBT").click(function () {
+            var pid = $("#DetailsID").val();
+            var lid = $("#LanguageID").val();
+            $.get("/Person/AddToPerson", { LID: lid, PID: pid });
+            /*$('#PersonTable').load("/Person/PersonDetails", { ID: pid });*/
+        });
+    });
+</script>

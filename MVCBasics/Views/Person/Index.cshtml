@@ -1,0 +1,172 @@
+﻿@model MVCBasics.Models.PeopleViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+@* Use the form below for search if not using AJAX *@
+<!--<form style="float:right;">-->
+@*<input type="submit" value="Search" class="btn btn-primary" style="float: right" />*@
+<!--<input id="search" asp-for="SearchPhrase" class="form-control" style="float: right; width: 30%" />
+    <label class="control-label" style="float:right;">Search By Anything</label>
+</form>-->
+@*<a asp-action="Create"
+       style="float:right;
+    clear:both; background:skyblue;
+    display:block;
+    text-decoration:none;
+    border-radius:5px;margin:10px">Create New</a>*@
+
+<form asp-action="Create" style="border:solid;border-width:2px;border-color:black; border-radius:5px;margin-top:10px;margin-bottom:10px;width:100%;padding:20px">
+    <h3>Create A New Person</h3>
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="CreatePerson.Name" class="control-label"></label>
+                <input asp-for="CreatePerson.Name" class="form-control" />
+                <span asp-validation-for="CreatePerson.Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="CreatePerson.PhoneNumber" class="control-label"></label>
+                <input asp-for="CreatePerson.PhoneNumber" class="form-control" />
+                <span asp-validation-for="CreatePerson.PhoneNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">City</label>
+                <select asp-items="@(new SelectList(Model.AllCities))" asp-for="@Model.CreatePerson.City.Name" class="form-control"><option>Select</option></select>
+                <span asp-validation-for="CreatePerson.City.Name" class="text-danger"></span>
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+
+    </div>
+</form>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <label>Enter A Person's ID' To View Its Details Or Delete It</label>
+            </div>
+            <div class="card-body">
+                <input type="text" id="DetailsID" class="form-control"/>
+                <div class="row" style="">
+
+                </div>
+            </div>
+            <div class="card-footer">
+                <input type="button" value="People" id="LoadPeople" class="btn btn-primary"/>
+                <input type="button" value="Details" id="PersonDetails" class="btn btn-primary"/>
+                <input type="button" value="Delete" id="PersonDelete" class="btn btn-primary"/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <label class="control-label">Search By Anything</label>
+            </div>
+            <div class="card-body">
+                <input id="search" class="form-control" />
+            </div>
+            <div class="card-footer">
+                <input id="SearchBt" type="button" value="Search" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<div id="PersonTable" class="table">
+    @*<div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-2">
+                    ID
+                </div>
+                <div class="col-sm-2">
+                    Name
+                </div>
+                <div class="col-sm-2">
+                    PhoneNumber
+                </div>
+                <div class="col-sm-2">
+                    City
+                </div>
+            </div>
+        </div>*@
+    @*Showing Table Data with Partial View Using Razor*@
+    @*@{
+            var index = 0;
+            @foreach (var item in Model.people)
+            {
+                <partial  name="_Person" model="item"/>
+                index++;
+            }
+        }*@
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#LoadPeople").click(function () {
+            $('#PersonTable').load("/Person/PeopleIndex");
+        });
+
+        $("#SearchBt").click(function () {
+            var sc = $("#search").val();
+            $('#PersonTable').load("/Person/PeopleIndex", {search: sc});
+        });
+
+        $("#PersonDetails").click(function () {
+            var id = $("#DetailsID").val();
+            $('#PersonTable').load("/Person/PersonDetails", { ID: id });
+        });
+        //$("#AddLanguageBT").click(function () {
+        //    var pid = $("#DetailsID").val();
+        //    var lid = $("#LanguageID").val();
+        //    $.get("/Person/AddToPerson", { LID: lid, PID: pid });
+        //});
+        $("#PersonDelete").click(function () {
+            var id = $("#DetailsID").val();
+            $('#PersonTable').load("/Person/Delete", { ID: id });
+            alert("@ViewBag.Message")
+            //var Data = JSON.stringify(id);
+            //$.ajax({
+            //    type: "POST",
+            //    data: Data,
+            //    url: "/Person/Delete",
+            //    dataType: "json",
+            //    contentType: false,
+            //    processData: false,
+
+            //    success: function (response) {
+            //        if (response.success) {
+            //            alert(response.responseText);
+            //        } else {
+            //            // DoSomethingElse()
+            //            alert(response.responseText);
+            //        }
+            //    },
+            //    error: function (response) {
+            //        alert("error") // I'm always get this.
+            //    }
+
+            //});
+        });
+    });
+</script>

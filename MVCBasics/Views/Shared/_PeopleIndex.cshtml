@@ -1,0 +1,27 @@
+﻿@model MVCBasics.Models.PeopleViewModel
+    <div>
+        <hr />
+        <div class="row">
+            <div class="col-sm-2">
+                ID
+            </div>
+            <div class="col-sm-2">
+                Name
+            </div>
+            <div class="col-sm-2">
+                PhoneNumber
+            </div>
+            <div class="col-sm-2">
+                City
+            </div>
+        </div>
+    </div>
+    @*Showing Table Data with Partial View Using Razor*@
+    @{
+            var index = 0;
+            @foreach (var item in Model.people)
+            {
+                <partial  name="_Person" model="item"/>
+                index++;
+            }
+        }

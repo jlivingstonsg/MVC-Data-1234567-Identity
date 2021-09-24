@@ -1,0 +1,25 @@
+﻿@model MVCBasics.Models.Person
+    <hr />
+    <div class="row">
+        <div class="col-sm-2">
+            @Html.DisplayFor(model => model.ID)
+        </div>
+        <div class="col-sm-2">
+            @Html.DisplayFor(model => model.Name)
+        </div>
+        <div class="col-sm-2">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </div>
+        <div class="col-sm-2">
+            @Html.DisplayFor(model => model.City.Name)
+        </div>
+        <div class="col-sm-1">
+            @Html.ActionLink("Edit", "Edit","Person",new { id = Model.ID })
+        </div>
+        <div class="col-sm-1">
+            @*@Html.ActionLink("Details", "Edit", new { id = Model.ID })*@
+        </div>
+        <div class="col-sm-1">
+            @*@Html.ActionLink("Delete", "Delete", new { id = Model.ID })*@
+        </div>
+    </div>

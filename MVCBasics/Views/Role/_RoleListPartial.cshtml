@@ -1,0 +1,29 @@
+﻿@model MVCBasics.Models.RoleViewModel
+<div>
+    <hr />
+    <div class="row">
+        <div class="col-sm-2">
+            ID
+        </div>
+        <div class="col-sm-2">
+            Name
+        </div>
+    </div>
+</div>
+@foreach (var role in Model.Roles)
+{
+    <div>
+        <hr />
+        <div class="row">
+            <div class="col-sm-2">
+                @role.Id
+            </div>
+            <div class="col-sm-2">
+                @role.Name
+            </div>
+            <div class="col-sm-1">
+                *@Html.ActionLink("Edit", "Edit", new { id = role.Id })
+            </div>
+        </div>
+    </div>
+}
